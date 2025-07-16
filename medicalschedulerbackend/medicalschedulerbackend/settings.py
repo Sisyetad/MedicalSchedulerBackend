@@ -41,7 +41,7 @@ MIDDLEWARE = [
     'simple_history.middleware.HistoryRequestMiddleware',
 ]
 
-ROOT_URLCONF = 'medicalschedullerbackend.urls'
+ROOT_URLCONF = 'medicalschedulerbackend.urls'
 
 TEMPLATES = [
     {
@@ -58,7 +58,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'medicalschedullerbackend.wsgi.application'
+WSGI_APPLICATION = 'medicalschedulerbackend.wsgi.application'
 
 DATABASES = {
     'default': {
@@ -95,3 +95,7 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
 }
+
+FIELD_ENCRYPTION_KEY = config('FIELD_ENCRYPTION_KEY')
+
+SIMPLE_HISTORY_HISTORY_USER_MODEL = 'User.UserModel'
