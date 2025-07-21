@@ -1,3 +1,5 @@
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from rest_framework import serializers
 from Role.Domain.role_entity import Role
 from User.Domain.user_entity import UserEntity
@@ -8,24 +10,41 @@ class UserSerializer(serializers.Serializer):
     email = serializers.EmailField()
     username = serializers.CharField(required=False)
     password = serializers.CharField(write_only=True, required=False)
-    role = RoleSerializer(required= False)
+    role = RoleSerializer(required=False)
     access_token = serializers.CharField(read_only=True, required=False)
     refresh_token = serializers.CharField(required=False)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)
     is_active = serializers.BooleanField(read_only=True)
 
+    def validate_password(self, value):
+        try:
+            validate_password(value)
+        except DjangoValidationError as e:
+            raise serializers.ValidationError(e.messages)
+        return value
+
     def validate(self, data):
         action = self.context.get('action')
+
         if action == 'signup':
             if not (data.get('username') and data.get('email') and data.get('password')):
                 raise serializers.ValidationError("Username, email, and password are required for signup.")
+            self.validate_password(data['password'])
+
         elif action == 'login':
             if not (data.get('email') and data.get('password')):
                 raise serializers.ValidationError("Email and password are required for login.")
+
         elif action == 'logout':
             if not data.get('refresh_token'):
                 raise serializers.ValidationError("Refresh token is required for logout.")
+            
+        elif action == 'update':
+            if not (data.get('username') and data.get('password')):
+                raise serializers.ValidationError("Username and password are required for update.")
+            self.validate_password(data['password'])
+
         return data
 
     def to_entity(self):

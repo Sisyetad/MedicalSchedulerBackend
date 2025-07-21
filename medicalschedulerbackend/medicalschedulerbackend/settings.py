@@ -1,3 +1,4 @@
+import os
 from decouple import config
 from pathlib import Path
 
@@ -73,6 +74,8 @@ DATABASES = {
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
@@ -99,3 +102,34 @@ REST_FRAMEWORK = {
 FIELD_ENCRYPTION_KEY = config('FIELD_ENCRYPTION_KEY')
 
 SIMPLE_HISTORY_HISTORY_USER_MODEL = 'User.UserModel'
+
+
+# SECURE_SSL_REDIRECT = True  # Redirect all HTTP to HTTPS.
+# SECURE_HSTS_SECONDS = 3600  # Enables Strict-Transport-Security.
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_BROWSER_XSS_FILTER = True
+
+
+
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default
+# SESSION_COOKIE_NAME = 'sessionid'
+
+
+
+
+
+# MIDDLEWARE = [
+#     'django.middleware.security.SecurityMiddleware',
+#     'django.middleware.common.CommonMiddleware',
+#     'django.contrib.auth.middleware.AuthenticationMiddleware', # needed for `request.user`
+#     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+#     'simple_history.middleware.HistoryRequestMiddleware',
+# ]
+
+# if 'RUNNING_ADMIN' in os.environ:
+#     MIDDLEWARE += [
+#         'django.contrib.sessions.middleware.SessionMiddleware',
+#         'django.middleware.csrf.CsrfViewMiddleware',
+#         'django.contrib.messages.middleware.MessageMiddleware',
+#     ]

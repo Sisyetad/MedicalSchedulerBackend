@@ -11,14 +11,14 @@ class UserViewSet(viewsets.ViewSet):
     def get_permissions(self):
         return [IsAuthenticated(), DynamicRolePermission()]
 
-    def get_service(self):
-        return UserService(DjangoUserRepository())
+    def get_service(self, request):
+        return UserService(DjangoUserRepository(request.user))
 
     def list(self, request):
         """GET /users/"""
         UserSerializer(context={"action": "list"})
         try:
-            service = self.get_service()
+            service = self.get_service(request=request)
             users = service.get_all_users()
             serializer = UserSerializer(users, many=True)
             return Response(serializer.data, status= status.HTTP_200_OK)
@@ -29,7 +29,7 @@ class UserViewSet(viewsets.ViewSet):
         """GET /users/{id}/"""
         UserSerializer(context={"action": "retrieve"})
         try:
-            service = self.get_service()
+            service = self.get_service(request=request)
             user = service.get_user_by_id(int(pk))
             serializer = UserSerializer(user)
             return Response(serializer.data, status= status.HTTP_200_OK)
@@ -39,7 +39,7 @@ class UserViewSet(viewsets.ViewSet):
     def update(self, request, pk=None):
         """PUT /users/{id}/"""
         try:
-            service = self.get_service()
+            service = self.get_service(request=request)
             serializer = UserSerializer(data=request.data, context= {"action":"update"})
             serializer.is_valid(raise_exception=True)
             user_entity = serializer.to_entity()
@@ -52,7 +52,7 @@ class UserViewSet(viewsets.ViewSet):
         """DELETE /users/{id}/"""
         UserSerializer(context={"action": "destroy"})
         try:
-            service = self.get_service()
+            service = self.get_service(request=request)
             service.delete_user(int(pk))
             return Response(status=status.HTTP_204_NO_CONTENT)
         except Exception as e:

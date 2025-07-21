@@ -1,5 +1,7 @@
 from django.contrib.auth.management.commands import createsuperuser
 from django.core.management import CommandError
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.contrib.auth import get_user_model
 from Role.Infrastructure.role_model import RoleModel
 from constants.roles import ROLE_HEADOFFICE
@@ -32,6 +34,12 @@ class Command(createsuperuser.Command):
             password2 = self.get_input('Password (again)', secret=True)
             if password != password2:
                 self.stderr.write("Error: Your passwords didn't match.")
+                password = None
+                continue
+            try:
+                validate_password(password)
+            except DjangoValidationError as e:
+                self.stderr.write("Error: " + "; ".join(e.messages))
                 password = None
                 continue
 
