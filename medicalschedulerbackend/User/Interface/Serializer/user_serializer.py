@@ -11,7 +11,7 @@ class UserSerializer(serializers.Serializer):
     username = serializers.CharField(required=False)
     password = serializers.CharField(write_only=True, required=False)
     role = RoleSerializer(required=False)
-    access_token = serializers.CharField(read_only=True, required=False)
+    access_token = serializers.CharField(read_only=True)
     refresh_token = serializers.CharField(required=False)
     created_at = serializers.DateTimeField(read_only=True)
     updated_at = serializers.DateTimeField(read_only=True)

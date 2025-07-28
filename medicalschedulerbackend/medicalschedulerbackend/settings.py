@@ -26,7 +26,8 @@ INSTALLED_APPS = [
     'Patient',
     'Receptionist',
     'Queue',
-    'Diagnosis'
+    'Diagnosis',
+    'drf_spectacular',
 ]
 
 AUTH_USER_MODEL = 'User.UserModel'
@@ -96,7 +97,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2,
 }
 
 FIELD_ENCRYPTION_KEY = config('FIELD_ENCRYPTION_KEY')
@@ -133,3 +137,12 @@ SIMPLE_HISTORY_HISTORY_USER_MODEL = 'User.UserModel'
 #         'django.middleware.csrf.CsrfViewMiddleware',
 #         'django.contrib.messages.middleware.MessageMiddleware',
 #     ]
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Medical Scheduler API',
+    'DESCRIPTION': 'API for scheduling medical appointments',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
