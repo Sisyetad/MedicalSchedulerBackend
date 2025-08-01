@@ -65,3 +65,10 @@ class BranchRepository(IBranchRepository):
 
     def getBranches(self):
         return [branch.to_entity() for branch in BranchModel.objects.select_related('headoffice').all()]
+    
+    def getBranchByEmail(self, email):
+        try:
+            branch = BranchModel.objects.get(email=email)
+            return branch
+        except BranchModel.DoesNotExist:
+            raise ValidationError("Branch with this email does not exist.")

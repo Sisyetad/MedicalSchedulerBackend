@@ -1,5 +1,6 @@
 from .role_model import RoleModel
 from ..Domain.role_repo import IRoleRepository
+from django.core.exceptions import ValidationError
 
 
 class RoleRepository(IRoleRepository):
@@ -21,7 +22,14 @@ class RoleRepository(IRoleRepository):
             role.name = role_name
             return role.to_entity()
         except RoleModel.DoesNotExist:
-            return ValueError("Invalid role ID.")
+            return ValidationError("Invalid role ID.")
     
     def getAllRoles(self):
         return [role.to_entity() for role in  RoleModel.objects.all()]
+    
+    def getRole(self, role_name):
+        try:
+            role = RoleModel.objects.get(role_name=role_name)
+            return role
+        except RoleModel.DoesNotExist:
+            return ValidationError("Role not found.")

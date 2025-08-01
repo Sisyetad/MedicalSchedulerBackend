@@ -16,3 +16,6 @@ class IRoleRepository(ABC):
 
     @abstractmethod
     def getAllRoles(self) -> List[Role]: pass
+
+    @abstractmethod
+    def getRole(self, role_name): pass

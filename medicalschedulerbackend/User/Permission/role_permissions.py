@@ -9,5 +9,7 @@ class DynamicRolePermission(BasePermission):
         action = getattr(view, 'action', None)
         key = f"{view_name}:{action}"
         allowed_roles = ROLE_PERMISSIONS.get(key, [])
+        if "authenticated" in allowed_roles:
+            return True
         user_role = getattr(request.user.role, 'role_name', None)
         return user_role in allowed_roles

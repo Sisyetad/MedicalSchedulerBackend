@@ -16,3 +16,6 @@ class IBranchRepository(ABC):
 
     @abstractmethod
     def getBranches(self): pass
+
+    @abstractmethod
+    def getBranchByEmail(self, email): pass
