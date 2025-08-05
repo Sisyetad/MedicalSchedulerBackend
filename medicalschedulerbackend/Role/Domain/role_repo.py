@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
+from Role.Infrastructure.role_model import RoleModel
+
 from .role_entity import Role
 
 
@@ -18,4 +20,4 @@ class IRoleRepository(ABC):
     def getAllRoles(self) -> List[Role]: pass
 
     @abstractmethod
-    def getRole(self, role_name): pass
+    def getRole(self, role_name)->RoleModel: pass

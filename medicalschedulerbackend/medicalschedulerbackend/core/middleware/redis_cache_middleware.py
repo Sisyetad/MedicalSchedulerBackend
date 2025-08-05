@@ -34,3 +34,17 @@
 
 #         response["X-Cache"] = "MISS"
 #         return response
+
+
+
+
+
+
+
+# for security and user based cache use logout event expire also this improve memory usage because of expiring the data that stored in the cache
+# @cache_invalidate([
+#     ("user_profile", str(user_id)),
+# ])
+# def handle_logout_event(event: LogoutEvent):
+#     ...
+

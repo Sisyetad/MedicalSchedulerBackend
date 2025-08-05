@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from Branch.Infrastructure.branch_model import BranchModel
+
 
 class IBranchRepository(ABC):
     @abstractmethod
@@ -18,4 +20,4 @@ class IBranchRepository(ABC):
     def getBranches(self): pass
 
     @abstractmethod
-    def getBranchByEmail(self, email): pass
+    def getBranchByEmail(self, email)-> BranchModel: pass

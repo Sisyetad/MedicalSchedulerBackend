@@ -43,7 +43,7 @@ class UserViewSet(viewsets.ViewSet):
             serializer = UserSerializer(data=request.data, context= {"action":"update"})
             serializer.is_valid(raise_exception=True)
             user_entity = serializer.to_entity()
-            user = service.update_user(int(pk), user_entity)
+            user = service.update_user(user_id=int(pk), user=user_entity)
             return Response(UserSerializer(user).data, status= status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status= status.HTTP_400_BAD_REQUEST)

@@ -10,10 +10,14 @@ from User.Infrastructure.auth_repo_imp import DjangoAuthRepository
 from User.Interface.Serializer.user_serializer import UserSerializer
 from User.Application.token_utils import TokenUtils
 
+from rest_framework.throttling import ScopedRateThrottle
 
 class AuthView(APIView):
     service = AuthService(DjangoAuthRepository())
 
+    throttle_scope = 'low_request'
+    throttle_classes = [ScopedRateThrottle]
+    
     def get_permissions(self):
         action = self.kwargs.get('action')
         if action in ['signup', 'login']:

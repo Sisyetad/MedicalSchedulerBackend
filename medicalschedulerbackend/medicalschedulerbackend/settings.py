@@ -1,6 +1,7 @@
 import os
 from decouple import config
 from pathlib import Path
+from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,6 +20,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'simple_history',
+    # 'djoser',
+    # 'django_celery_results',
     'Admin',
     'Role',
     'Branch',
@@ -98,6 +101,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_THROTTLE_CLASSES': [
         'rest_framework.throttling.AnonRateThrottle',
         'rest_framework.throttling.UserRateThrottle',
         'rest_framework.throttling.ScopedRateThrottle',
@@ -168,3 +173,36 @@ CACHES = {
         },
     }
 }
+
+
+CELERY_BROKER_URL = 'redis://redis:6379/1'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
+# CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+
+# DJOSER = {
+#     'LOGIN_FIELD': 'email',
+#     'USER_CREATE_PASSWORD_RETYPE': True,
+#     'USER_ID_FIELD': 'id',
+#     'SEND_ACTIVATION_EMAIL': True,
+#     'ACTIVATION_URL': 'activate/{uid}/{token}', 
+#     'SERIALIZERS': {
+#         'user_create': 'User.Interface.Serializer.custom_serializer.CustomUserCreateSerializer',
+#         'user': 'User.Interface.Serializer.UserSerializer',
+#         'current_user': 'User.Interface.Serializer.UserSerializer',
+#     },
+# }
+
+# DEFAULT_FROM_EMAIL = 'admin@medicalscheduler.com'

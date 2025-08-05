@@ -13,7 +13,7 @@ class BranchViewSet(viewsets.ViewSet):
         return [IsAuthenticated(), DynamicRolePermission()]
 
     def get_service(self, request):
-        return BranchService(current_user=request.user, repository=BranchRepository())
+        return BranchService(current_user=request.user, repository=BranchRepository(current_user=request.user))
 
     def list(self, request):
         """GET /branches/"""

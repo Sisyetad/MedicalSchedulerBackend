@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password
 from django.core.exceptions import ValidationError
 
 class DjangoUserRepository(IUserRepository):
-    def __init__(self, current_user: Optional[UserEntity]):
+    def __init__(self, current_user: Optional[UserModel]):
         self.current_user = current_user
 
     def get_all(self):
@@ -29,8 +29,8 @@ class DjangoUserRepository(IUserRepository):
     def update(self, user_id: int, user: UserEntity):
         if not self.current_user:
             raise ValidationError("Authentication required!")
-        if self.current_user.user_id != user_id:
-            raise ValidationError("You can only update your own account!")
+        if self.current_user.pk != user_id:
+            raise ValidationError(f"You can only update your own account! {self.current_user.pk, user_id}")
         try:
             user_obj = UserModel.objects.get(pk=user_id)
             user_obj.username = user.username
