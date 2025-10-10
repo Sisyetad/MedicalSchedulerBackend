@@ -6,6 +6,6 @@ from .Interface.View.auth_view import AuthView
 from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
-    path('<str:action>/', AuthView.as_view(), name='auth-action'),
-    path('refresh/', TokenRefreshView.as_view(), name='token_refresh')
+    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('<str:action>/', AuthView.as_view(), name='auth-action')
 ]

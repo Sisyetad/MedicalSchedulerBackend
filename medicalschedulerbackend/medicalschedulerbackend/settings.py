@@ -7,8 +7,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
+HOST=config('HOST')
+print("HOST env variable:", HOST)
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = [
+    '*'
+]
 
 INSTALLED_APPS = [
     'User',
@@ -22,7 +26,7 @@ INSTALLED_APPS = [
     'simple_history',
     # 'djoser',
     # 'django_celery_results',
-    'Admin',
+    'Admin.apps.AdminConfig',
     'Role',
     'Branch',
     'Doctor',
@@ -40,7 +44,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     # 'medicalschedulerbackend.core.middleware.redis_cache_middleware.RedisCacheMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -122,17 +126,23 @@ FIELD_ENCRYPTION_KEY = config('FIELD_ENCRYPTION_KEY')
 
 SIMPLE_HISTORY_HISTORY_USER_MODEL = 'User.UserModel'
 
+USE_X_FORWARDED_HOST = True
+SECURE_SSL_REDIRECT = True  # Redirect all HTTP to HTTPS.
+SECURE_HSTS_SECONDS = 3600  # Enables Strict-Transport-Security.
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+CSRF_TRUSTED_ORIGINS = [
+    f'https://{HOST}',
+]
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
-# SECURE_SSL_REDIRECT = True  # Redirect all HTTP to HTTPS.
-# SECURE_HSTS_SECONDS = 3600  # Enables Strict-Transport-Security.
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# SECURE_BROWSER_XSS_FILTER = True
 
 
-
-# SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default
-# SESSION_COOKIE_NAME = 'sessionid'
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Default
+SESSION_COOKIE_NAME = 'sessionid'
 
 
 
@@ -165,7 +175,7 @@ SPECTACULAR_SETTINGS = {
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': config('REDIS_URL', default='redis://redis:6379/1'),
+        'LOCATION': config('REDIS_URL'),
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             # 'PARSER_CLASS': 'redis.connection.HiredisParser',
@@ -175,8 +185,8 @@ CACHES = {
 }
 
 
-CELERY_BROKER_URL = 'redis://redis:6379/1'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/1'
+CELERY_BROKER_URL = config('REDIS_URL')
+CELERY_RESULT_BACKEND = config('REDIS_URL')
 # CELERY_RESULT_BACKEND = 'django-db'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
